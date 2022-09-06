@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React from 'react';
 import Carousel from 'react-bootstrap/Carousel';
+import Button from 'react-bootstrap/Button';
 
 
 class BestBooks extends React.Component {
@@ -15,7 +16,7 @@ class BestBooks extends React.Component {
   /* TODO: Make a GET request to your API to fetch all the books from the database  */
   componentDidMount = () => {
     axios
-    .get('http://localhost:3010/book')
+    .get(`https://librar-book.herokuapp.com/book`)
     .then(result => {
       console.log(result.data);
       this.setState({
@@ -24,13 +25,46 @@ class BestBooks extends React.Component {
     })
      .catch(err => console.log(err));
   }
+  addBook = (event) => {
+    event.preventDefault();
+    const obj= {
+      title: event.target.title.value,
+      description: event.target.description.value,
+      status: event.target.status.value,
+    }
+    axios
+    .post(`https://librar-book.herokuapp.com/book`, obj )   
+    .then(result => {
+      this.setState({
+        books: result.data
+      })
+    })
+    .catch(err => console.log(err));
+  } 
+  deleteBook = (id) => {
+    axios
+    .delete(`https://librar-book.herokuapp.com/book/${id}`)
+    .then(result => {
+      this.setState({
+        books: result.data
+      })
+    })
+    .catch(err => console.log(err));
+  }
+
+
 
   render() {
     /* TODO: render all the books in a Carousel */
     return (
       <>
-      
+        <form onSubmit={this.addBook}>
         <h2>My Essential Lifelong Learning &amp; Formation Shelf</h2>
+        <input type="text" placeholder="Book title" name="title" />
+        <input type="text" placeholder="Book description" name="description" />
+        <input type="text" placeholder="Book status" name="status" />
+        <Button variant="primary" type="submit">Add Book</Button>
+        </form>
         {this.state.books.length ? (<Carousel>{
           this.state.books.map(Element => {
             return (
@@ -44,12 +78,13 @@ class BestBooks extends React.Component {
           <h3>{Element.title}</h3>
           <p>{Element.description}</p>
           <h3>{Element.status}</h3>
+          <Button variant="primary" onClick={() => this.deleteBook(Element._id)}>Delete Book</Button>
         </Carousel.Caption>
       </Carousel.Item>
     )
           })
          } </Carousel>) : (
-          <h3>No Books Found :(</h3>
+          <h3>Bashar Telfah :(</h3>
         )}
       </>
     )
