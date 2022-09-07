@@ -2,13 +2,16 @@ import axios from 'axios';
 import React from 'react';
 import Carousel from 'react-bootstrap/Carousel';
 import Button from 'react-bootstrap/Button';
+import UpdateForm from './UpdateForm';
+
 
 
 class BestBooks extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      books: []
+      books: [],
+      currentBook :[]
     }
   }
 
@@ -52,13 +55,47 @@ class BestBooks extends React.Component {
     })
     .catch(err => console.log(err));
   }
+  openForm = (item) => {
+    this.setState({
+      showFlag : true,
+      currentBook : item
+    })
+    console.log(item);
+  }
+
+  handleClose = () =>{
+    this.setState({
+      showFlag : false
+    })
+  }
+  updateBook = (event) =>{
+    event.preventDefault();
+    let obj = {
+      title: event.target.title.value,
+      description: event.target.description.value,
+      status: event.target.status.value,
+    }
+    const id = this.state.currentBook._id;
+    axios
+    .put(`https://book-library-b.herokuapp.com/books/${id}`, obj)
+    .then(result => { 
+      this.setState({
+        books: result.data
+      })
+      this.handleClose();
+    })
+    .catch(err => console.log(err));
+  }
 
 
 
-  render() {
-    /* TODO: render all the books in a Carousel */
+
+
+/* TODO: render all the books in a Carousel */
+  render() {  
     return (
       <>
+       <div>
         <form onSubmit={this.addBook}>
         <h2>My Essential Lifelong Learning &amp; Formation Shelf</h2>
         <input type="text" placeholder="Book title" name="title" />
@@ -80,6 +117,7 @@ class BestBooks extends React.Component {
           <p>{Element.description}</p>
           <h3>{Element.status}</h3>
           <Button variant="primary" onClick={() => this.deleteBook(Element._id)}>Delete Book</Button>
+          <Button variant="primary" onClick={() => this.openForm(Element)}>Update Book</Button>
         </Carousel.Caption>
       </Carousel.Item>
     )
@@ -87,9 +125,17 @@ class BestBooks extends React.Component {
          } </Carousel>) : (
           <h3>Bashar Telfah :(</h3>
         )}
-      </>
+  <UpdateForm
+   showFlag={this.state.showFlag}
+   handleClose={this.handleClose}
+   updateBook={this.updateBook}
+   currentBook={this.state.currentBook}
+          />
+      </div>
+          </>
     )
   }
 }
+
 
 export default BestBooks;
