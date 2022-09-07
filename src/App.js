@@ -24,7 +24,7 @@ class App extends React.Component {
             </Route>
             <Route
               exact path="/about"
-              element={<About />}
+              element={isAuthenticated && <About />}
             >
             </Route>
             <Route
