@@ -2,7 +2,7 @@ import axios from 'axios';
 import React from 'react';
 import Carousel from 'react-bootstrap/Carousel';
 import Button from 'react-bootstrap/Button';
-import UpdateForm from './UpdateForm';
+import UpdateForm from "./UpdateForm";
 
 
 
@@ -10,8 +10,9 @@ class BestBooks extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      showFlag : false,
       books: [],
-      currentBook :[]
+      currentBook : {},
     }
   }
 
@@ -70,21 +71,22 @@ class BestBooks extends React.Component {
   }
   updateBook = (event) =>{
     event.preventDefault();
+    alert('1');
     let obj = {
       title: event.target.title.value,
       description: event.target.description.value,
       status: event.target.status.value,
     }
-    const id = this.state.currentBook._id;
-    axios
-    .put(`https://book-library-b.herokuapp.com/books/${id}`, obj)
-    .then(result => { 
-      this.setState({
-        books: result.data
-      })
-      this.handleClose();
-    })
-    .catch(err => console.log(err));
+    // const id = this.state.currentBook._id;
+    // axios
+    // .put(`https://book-library-b.herokuapp.com/updateBook/${id}`, obj)
+    // .then(result => { 
+    //   this.setState({
+    //     books: result.data
+    //   })
+    //   this.handleClose();
+    // })
+    // .catch(err => console.log(err));
   }
 
 
@@ -126,10 +128,10 @@ class BestBooks extends React.Component {
           <h3>Bashar Telfah :(</h3>
         )}
   <UpdateForm
-   showFlag={this.state.showFlag}
-   handleClose={this.handleClose}
-   updateBook={this.updateBook}
-   currentBook={this.state.currentBook}
+  showFlag={this.state.showFlag}
+  handleClose={this.handleClose}
+  currentBook={this.state.currentBook}
+  updateBook={this.updateBook}
           />
       </div>
           </>
