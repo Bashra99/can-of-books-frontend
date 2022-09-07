@@ -4,7 +4,6 @@ import { withAuth0 } from '@auth0/auth0-react';
 class Profile extends Component {
   render() {
     const { user } = this.props.auth0;
-    {console.log(user)}
     return <div>
        <p> Welcome {user.name}</p>
        <p>  Email {user.email}</p>

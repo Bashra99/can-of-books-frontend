@@ -71,22 +71,21 @@ class BestBooks extends React.Component {
   }
   updateBook = (event) =>{
     event.preventDefault();
-    alert('1');
     let obj = {
       title: event.target.title.value,
       description: event.target.description.value,
       status: event.target.status.value,
     }
-    // const id = this.state.currentBook._id;
-    // axios
-    // .put(`https://book-library-b.herokuapp.com/updateBook/${id}`, obj)
-    // .then(result => { 
-    //   this.setState({
-    //     books: result.data
-    //   })
-    //   this.handleClose();
-    // })
-    // .catch(err => console.log(err));
+    const id = this.state.currentBook._id;
+    axios
+    .put(`https://book-library-b.herokuapp.com/updateBook/${id}`, obj)
+    .then(result => { 
+      this.setState({
+        books: result.data
+      })
+      this.handleClose();
+    })
+    .catch(err => console.log(err));
   }
 
 
